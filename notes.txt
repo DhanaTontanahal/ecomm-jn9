@@ -1,0 +1,67 @@
+firebase deploy --only hosting,firestore,storage
+
+
+
+gcloud projects describe ecomm-admin-app --format="value(projectNumber)"
+# copy the number: e.g. 123456789012
+
+
+
+PROJECT_ID=ecomm-admin-app
+PROJECT_NUMBER=123456789012   # ← replace with your number
+
+gcloud projects add-iam-policy-binding "$PROJECT_ID" \
+  --member="serviceAccount:service-$PROJECT_NUMBER@gcp-sa-eventarc.iam.gserviceaccount.com" \
+  --role="roles/eventarc.serviceAgent"
+
+
+
+# See which accounts are logged in
+gcloud auth list
+
+# Add the right account (opens a browser)
+gcloud auth login
+
+# Make that account active (replace with the correct email)
+gcloud config set account yourownership@gmail.com
+
+
+
+
+# Create a named config for this account once, then reuse it
+gcloud config configurations create ecomm-owner
+gcloud config set account yourownership@gmail.com
+gcloud config configurations activate ecomm-owner
+
+
+
+
+firebase logout
+firebase login --reauth
+
+
+
+# Show projects you can access (Firebase CLI)
+firebase projects:list
+
+# Set your local directory to use the ecomm project
+firebase use ecomm-admin-app
+
+
+gcloud projects describe ecomm-admin-app --format="value(projectNumber)"
+# copy the 12-digit number -> PROJECT_NUMBER
+
+
+PROJECT_ID=ecomm-admin-app
+PROJECT_NUMBER=YOUR_12_DIGIT_NUMBER
+
+gcloud projects add-iam-policy-binding "$PROJECT_ID" \
+  --member="serviceAccount:service-$PROJECT_NUMBER@gcp-sa-eventarc.iam.gserviceaccount.com" \
+  --role="roles/eventarc.serviceAgent"
+
+
+gcloud projects add-iam-policy-binding "$PROJECT_ID" \
+  --member="serviceAccount:service-$PROJECT_NUMBER@gcp-sa-eventarc.iam.gserviceaccount.com" \
+  --role="roles/eventarc.viewer"
+
+

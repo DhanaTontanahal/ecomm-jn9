@@ -1,0 +1,150 @@
+// src/pages/purchases/Expenses.jsx
+import React, { useEffect, useMemo, useState } from "react";
+import { collection, addDoc, updateDoc, doc, onSnapshot, orderBy, query, serverTimestamp } from "firebase/firestore";
+import { db } from "../../firebase/firebase";
+import { FiPlus, FiSearch, FiX, FiDownload, FiEdit3 } from "react-icons/fi";
+import { Page, Head, Input, Select, Btn, Card, Table, DrawerWrap, Drawer, DrawerHead, Grid2, C } from "./purchasesUI";
+
+function ExpenseForm({ initial, vendors, onClose }) {
+    const [saving, setSaving] = useState(false);
+    const [form, setForm] = useState({
+        date: initial?.date?.toDate?.()?.toISOString().slice(0, 10) || new Date().toISOString().slice(0, 10),
+        vendorId: initial?.vendorId || "",
+        category: initial?.category || "",
+        reference: initial?.reference || "",
+        amount: initial?.amount || 0,
+        tax: initial?.tax || 0,
+        notes: initial?.notes || "",
+        attachmentUrl: initial?.attachmentUrl || "",
+        status: initial?.status || "BOOKED" // BOOKED | PAID
+    });
+
+    async function save() {
+        if (!form.vendorId || !form.category || !Number(form.amount)) { alert("Vendor, category and amount are required."); return; }
+        setSaving(true);
+        const payload = {
+            vendorId: form.vendorId, category: form.category, reference: form.reference || null,
+            amount: Number(form.amount || 0), tax: Number(form.tax || 0), total: Number(form.amount || 0) + Number(form.tax || 0),
+            notes: form.notes || null, attachmentUrl: form.attachmentUrl || null, status: form.status,
+            date: new Date(form.date), updatedAt: serverTimestamp(), ...(initial?.id ? {} : { createdAt: serverTimestamp() })
+        };
+        try {
+            if (initial?.id) await updateDoc(doc(db, "expenses", initial.id), payload);
+            else await addDoc(collection(db, "expenses"), payload);
+            onClose(true);
+        } finally { setSaving(false); }
+    }
+
+    return (
+        <DrawerWrap>
+            <Drawer>
+                <DrawerHead>
+                    <h3 style={{ margin: 0 }}>{initial?.id ? "Edit Expense" : "New Expense"}</h3>
+                    <div style={{ display: "flex", gap: 8 }}>
+                        <Btn onClick={save} disabled={saving}>{saving ? "Saving…" : "Save"}</Btn>
+                        <Btn as="button" style={{ background: "transparent", border: `1px solid ${C.border}`, color: C.text }} onClick={onClose}><FiX /> Close</Btn>
+                    </div>
+                </DrawerHead>
+                <div style={{ padding: 12, display: "grid", gap: 10 }}>
+                    <Grid2>
+                        <Input type="date" value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} />
+                        <Select value={form.vendorId} onChange={e => setForm({ ...form, vendorId: e.target.value })}>
+                            <option value="">Select Vendor</option>
+                            {vendors.map(v => <option key={v.id} value={v.id}>{v.displayName}</option>)}
+                        </Select>
+                    </Grid2>
+                    <Grid2>
+                        <Input placeholder="Category (e.g., Office Supplies)" value={form.category} onChange={e => setForm({ ...form, category: e.target.value })} />
+                        <Input placeholder="Reference (optional)" value={form.reference} onChange={e => setForm({ ...form, reference: e.target.value })} />
+                    </Grid2>
+                    <Grid2>
+                        <Input type="number" placeholder="Amount" value={form.amount} onChange={e => setForm({ ...form, amount: e.target.value })} />
+                        <Input type="number" placeholder="Tax" value={form.tax} onChange={e => setForm({ ...form, tax: e.target.value })} />
+                    </Grid2>
+                    <Grid2>
+                        <Select value={form.status} onChange={e => setForm({ ...form, status: e.target.value })}>
+                            <option>BOOKED</option><option>PAID</option>
+                        </Select>
+                        <Input placeholder="Attachment URL (optional)" value={form.attachmentUrl} onChange={e => setForm({ ...form, attachmentUrl: e.target.value })} />
+                    </Grid2>
+                    <textarea rows={5} style={{ width: "100%", background: C.glass2, color: C.text, border: `1px solid ${C.border}`, borderRadius: 10, padding: 10 }} placeholder="Notes" value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })} />
+                </div>
+            </Drawer>
+        </DrawerWrap>
+    );
+}
+
+export default function Expenses() {
+    const [rows, setRows] = useState([]);
+    const [vendors, setVendors] = useState([]);
+    const [qstr, setQstr] = useState("");
+    const [open, setOpen] = useState(null);
+
+    useEffect(() => {
+        const unsub = onSnapshot(query(collection(db, "expenses"), orderBy("date", "desc")), s => setRows(s.docs.map(d => ({ id: d.id, ...d.data() }))));
+        const unsubV = onSnapshot(query(collection(db, "vendors"), orderBy("displayName", "asc")), s => setVendors(s.docs.map(d => ({ id: d.id, ...d.data() }))));
+        return () => { unsub(); unsubV(); };
+    }, []);
+
+    const filtered = useMemo(() => {
+        const t = qstr.trim().toLowerCase();
+        if (!t) return rows;
+        return rows.filter(r => {
+            const v = vendors.find(v => v.id === r.vendorId);
+            return [r.category, r.reference, v?.displayName].some(x => String(x || "").toLowerCase().includes(t));
+        });
+    }, [rows, qstr, vendors]);
+
+    const vendorName = id => vendors.find(v => v.id === id)?.displayName || "-";
+
+    function exportExpense(r) {
+        const w = window.open("", "_blank"); if (!w) return;
+        w.document.write(`<html><body style="font-family:system-ui;padding:24px">
+      <h2>Expense</h2>
+      <p><b>Date:</b> ${r.date?.toDate?.()?.toLocaleDateString?.() || ""}</p>
+      <p><b>Vendor:</b> ${vendorName(r.vendorId)}</p>
+      <p><b>Category:</b> ${r.category}</p>
+      <p><b>Reference:</b> ${r.reference || "-"}</p>
+      <p><b>Amount:</b> ₹ ${r.amount} &nbsp; <b>Tax:</b> ₹ ${r.tax} &nbsp; <b>Total:</b> ₹ ${r.total}</p>
+      <p><b>Status:</b> ${r.status}</p>
+      <hr/><pre>${JSON.stringify(r, null, 2)}</pre>
+      <script>window.print()</script>
+    </body></html>`); w.document.close();
+    }
+
+    return (
+        <Page>
+            <Head>
+                <div style={{ position: "relative", flex: 1 }}>
+                    <Input placeholder="Search vendor / category / ref" value={qstr} onChange={e => setQstr(e.target.value)} style={{ paddingLeft: 36 }} />
+                    <FiSearch style={{ position: "absolute", left: 10, top: 12, color: C.sub }} />
+                </div>
+                <Btn onClick={() => setOpen({})}><FiPlus /> New Expense</Btn>
+            </Head>
+
+            <Card>
+                <Table>
+                    <thead><tr><th>Date</th><th>Vendor</th><th>Category</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody>
+                        {filtered.map(r => (
+                            <tr key={r.id}>
+                                <td>{r.date?.toDate?.()?.toLocaleDateString?.() || ""}</td>
+                                <td>{vendorName(r.vendorId)}</td>
+                                <td>{r.category}</td>
+                                <td>₹ {Number(r.total || 0).toLocaleString("en-IN")}</td>
+                                <td>{r.status}</td>
+                                <td style={{ display: "flex", gap: 8 }}>
+                                    <Btn as="button" style={{ background: "transparent", border: `1px solid ${C.border}`, color: C.text }} onClick={() => setOpen(r)}><FiEdit3 /> Edit</Btn>
+                                    <Btn as="button" style={{ background: "transparent", border: `1px solid ${C.border}`, color: C.text }} onClick={() => exportExpense(r)}><FiDownload /> PDF</Btn>
+                                </td>
+                            </tr>
+                        ))}
+                        {!filtered.length && <tr><td colSpan={6} style={{ color: C.sub, padding: 16 }}>No expenses yet.</td></tr>}
+                    </tbody>
+                </Table>
+            </Card>
+
+            {!!open && <ExpenseForm initial={Object.keys(open).length ? open : null} vendors={vendors} onClose={() => setOpen(null)} />}
+        </Page>
+    );
+}

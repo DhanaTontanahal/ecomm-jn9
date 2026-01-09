@@ -1,0 +1,209 @@
+[
+  {
+    "file": "ghee-and-oils.jpg",
+    "title": "Ghee & Oils",
+    "displayName": "Ghee & Oils",
+    "slug": "ghee-and-oils",
+    "order": 10,
+    "active": true,
+    "gstRate": 5
+  },
+  {
+    "file": "pulses.jpg",
+    "title": "Pulses",
+    "displayName": "Pulses",
+    "slug": "pulses",
+    "order": 20,
+    "active": true,
+    "gstRate": 5
+  },
+  {
+    "file": "spices.jpg",
+    "title": "Spices",
+    "displayName": "Spices",
+    "slug": "spices",
+    "order": 30,
+    "active": true,
+    "gstRate": 5
+  },
+  {
+    "file": "dry-fruits.jpg",
+    "title": "Dry Fruits",
+    "displayName": "Dry Fruits",
+    "slug": "dry-fruits",
+    "order": 40,
+    "active": true,
+    "gstRate": 5
+  },
+  {
+    "file": "snacks.jpg",
+    "title": "Snacks",
+    "displayName": "Snacks",
+    "slug": "snacks",
+    "order": 50,
+    "active": true,
+    "gstRate": 12
+  },
+  {
+    "file": "millets.jpg",
+    "title": "Millets",
+    "displayName": "Millets",
+    "slug": "millets",
+    "order": 60,
+    "active": true,
+    "gstRate": 0
+  },
+  {
+    "file": "sugars-and-honey.jpg",
+    "title": "Sugars & Honey",
+    "displayName": "Sugars & Honey",
+    "slug": "sugars-and-honey",
+    "order": 70,
+    "active": true,
+    "gstRate": 5
+  },
+  {
+    "file": "flours.jpg",
+    "title": "Flours",
+    "displayName": "Flours",
+    "slug": "flours",
+    "order": 80,
+    "active": true,
+    "gstRate": 5
+  },
+  {
+    "file": "grains-and-cereals.jpg",
+    "title": "Grains & Cereals",
+    "displayName": "Grains & Cereals",
+    "slug": "grains-and-cereals",
+    "order": 90,
+    "active": true,
+    "gstRate": 0
+  },
+  {
+    "file": "superfoods.jpg",
+    "title": "Superfoods",
+    "displayName": "Superfoods",
+    "slug": "superfoods",
+    "order": 100,
+    "active": true,
+    "gstRate": 5
+  },
+  {
+    "file": "ready-to-cook-eat.jpg",
+    "title": "Ready to Cook/Eat",
+    "displayName": "Ready to Cook/Eat",
+    "slug": "ready-to-cook-eat",
+    "order": 110,
+    "active": true,
+    "gstRate": 5
+  },
+  {
+    "file": "gifting.jpg",
+    "title": "Gifting",
+    "displayName": "Gifting",
+    "slug": "gifting",
+    "order": 120,
+    "active": true,
+    "gstRate": 0
+  },
+  {
+    "file": "conscious-food-for-kids.jpg",
+    "title": "Conscious Food For Kids",
+    "displayName": "Conscious Food For Kids",
+    "slug": "conscious-food-for-kids",
+    "order": 130,
+    "active": true,
+    "gstRate": 0
+  },
+  {
+    "file": "mumbai-only-deliveries.jpg",
+    "title": "Mumbai-only Deliveries",
+    "displayName": "Mumbai-only Deliveries",
+    "slug": "mumbai-only-deliveries",
+    "order": 140,
+    "active": true,
+    "gstRate": 0
+  },
+  {
+    "file": "vegetables.jpg",
+    "title": "Vegetables",
+    "displayName": "Vegetables",
+    "slug": "vegetables",
+    "order": 210,
+    "active": true,
+    "gstRate": 0
+  },
+  {
+    "file": "leafy-vegetables.jpg",
+    "title": "Leafy Vegetables",
+    "displayName": "Leafy Vegetables",
+    "slug": "leafy-vegetables",
+    "order": 220,
+    "active": true,
+    "gstRate": 0
+  },
+  {
+    "file": "fruits.jpg",
+    "title": "Fruits",
+    "displayName": "Fruits",
+    "slug": "fruits",
+    "order": 230,
+    "active": true,
+    "gstRate": 0
+  },
+  {
+    "file": "staples.jpg",
+    "title": "Staples",
+    "displayName": "Staples",
+    "slug": "staples",
+    "order": 240,
+    "active": true,
+    "gstRate": 0
+  },
+  {
+    "file": "herbs-and-spices.jpg",
+    "title": "Herbs & Spices",
+    "displayName": "Herbs & Spices",
+    "slug": "herbs-and-spices",
+    "order": 250,
+    "active": true,
+    "gstRate": 0
+  },
+  {
+    "file": "flowers.jpg",
+    "title": "Flowers",
+    "displayName": "Flowers",
+    "slug": "flowers",
+    "order": 260,
+    "active": true,
+    "gstRate": 0
+  },
+  {
+    "file": "protein-rich.jpg",
+    "title": "Protein Rich",
+    "displayName": "Protein Rich",
+    "slug": "protein-rich",
+    "order": 310,
+    "active": true,
+    "gstRate": 0
+  },
+  {
+    "file": "weight-loss.jpg",
+    "title": "Weight Loss",
+    "displayName": "Weight Loss",
+    "slug": "weight-loss",
+    "order": 320,
+    "active": true,
+    "gstRate": 0
+  },
+  {
+    "file": "gluten-free.jpg",
+    "title": "Gluten Free",
+    "displayName": "Gluten Free",
+    "slug": "gluten-free",
+    "order": 330,
+    "active": true,
+    "gstRate": 0
+  }
+]

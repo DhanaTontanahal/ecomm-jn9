@@ -1,0 +1,55 @@
+/* index.css */
+:root {
+  color-scheme: light;
+}
+
+/* 1) Global box-sizing + prevent sideways scroll */
+*, *::before, *::after { box-sizing: border-box; }
+html, body, #root { width: 100%; max-width: 100%; overflow-x: hidden; }
+
+/* 2) Reasonable defaults for typography & smoothing */
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+  background-color: #ffffff;
+  color: #333;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+/* 3) Media never overflow their container */
+img, svg, video, canvas { max-width: 100%; height: auto; display: block; }
+
+/* 4) Buttons/inputs inherit font and don’t shrink text on iOS */
+button, input, select, textarea { font: inherit; line-height: inherit; }
+
+/* 5) Respect reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 6) Help with 100vh bugs on mobile Safari (use .min-svh where needed) */
+.min-svh { min-height: 100svh; }
+
+
+/* global.css */
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin .6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+
+:root { --bottom-nav-offset: 96px; }
